@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ordering.Domain.Common
+﻿namespace Ordering.Domain.Common
 {
     public abstract class EntityBase
     {
@@ -8,7 +6,7 @@ namespace Ordering.Domain.Common
 
         public string CreatedBy { get; set; }
 
-        public DateOnly CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public string LastModifiedBy { get; set; }
 
