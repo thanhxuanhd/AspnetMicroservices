@@ -16,6 +16,9 @@ services:
   portainer:
     image: portainer/portainer-ce
 
+  orderdb:
+    image: mcr.microsoft.com/mssql/server:latest
+
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -40,6 +43,12 @@ services:
     build:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
 volumes:
   mongo_data:

@@ -23,7 +23,7 @@ public class EmailService : IEmailService
         _logger = logger;
     }
 
-    public async Task<bool> SendEmail(Email email)
+    public async Task<bool> SendMail(Email email)
     {
         var client = new SendGridClient(_emailSettings.APIKey);
 
