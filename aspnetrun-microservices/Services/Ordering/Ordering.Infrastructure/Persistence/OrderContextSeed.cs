@@ -19,7 +19,24 @@ public class OrderContextSeed
     {
         return new List<Order>
             {
-                new Order() {UserName = "swn", FirstName = "Mehmet", LastName = "Ozkaya", EmailAddress = "ezozkme@gmail.com", AddressLine = "Bahcelievler", Country = "Turkey", TotalPrice = 350 }
+                new Order() {
+                    UserName = "swn",
+                    FirstName = "Mehmet",
+                    LastName = "Ozkaya",
+                    EmailAddress = "ezozkme@gmail.com",
+                    AddressLine = "Bahcelievler",
+                    Country = "Turkey",
+                    TotalPrice = 350,
+                    CVV = "",
+                    CardName = "",
+                    CardNumber = "",
+                    State = "",
+                    PaymentMethod = 0,
+                    ZipCode = "",
+                    Expiration = "",
+                    LastModifiedBy = "",
+                    CreatedBy = ""
+                }
             };
     }
 }
