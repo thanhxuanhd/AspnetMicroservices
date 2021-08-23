@@ -1,0 +1,56 @@
+﻿using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Net.Sockets;
+
+namespace Common.Logging;
+public class LoggingDelegatingHandler : DelegatingHandler
+{
+    private readonly ILogger<LoggingDelegatingHandler> logger;
+
+    public LoggingDelegatingHandler(ILogger<LoggingDelegatingHandler> logger)
+    {
+        this.logger = logger;
+    }
+
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            logger.LogInformation("Sending request to {Url}", request.RequestUri);
+
+            var response = await base.SendAsync(request, cancellationToken);
+
+            if (response.IsSuccessStatusCode)
+            {
+                HttpRequestMessage? requestMessage = response.RequestMessage;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                logger.LogInformation("Received a success response from {Url}", requestMessage.RequestUri);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            }
+            else
+            {
+                logger.LogWarning("Received a non-success status code {StatusCode} from {Url}", (int)response.StatusCode, response.RequestMessage.RequestUri);
+            }
+
+            return response;
+        }
+        catch (HttpRequestException ex)
+            when (ex.InnerException is SocketException se && se.SocketErrorCode == SocketError.ConnectionRefused)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            string? hostWithPort = !request.RequestUri.IsDefaultPort
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                ? $"{request.RequestUri.DnsSafeHost}:{request.RequestUri.Port}"
+                : request.RequestUri.DnsSafeHost;
+
+            logger.LogCritical(ex, "Unable to connect to {Host}. Please check the " +
+                                    "configuration to ensure the correct URL for the service " +
+                                    "has been configured.", hostWithPort);
+        }
+
+        return new HttpResponseMessage(HttpStatusCode.BadGateway)
+        {
+            RequestMessage = request
+        };
+    }
+}
