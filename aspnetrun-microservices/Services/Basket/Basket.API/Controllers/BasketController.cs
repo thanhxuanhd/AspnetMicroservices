@@ -26,12 +26,13 @@ namespace Basket.API.Controllers
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
 
-        public BasketController(IBasketRepository repository, ILogger<BasketController> logger, IPublishEndpoint publishEndpoint, IMapper mapper)
+        public BasketController(IBasketRepository repository, ILogger<BasketController> logger, IPublishEndpoint publishEndpoint, IMapper mapper, DiscountGrpcService discountService)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _discountService = discountService ?? throw new ArgumentNullException(nameof(discountService));
         }
 
         [HttpGet("{userName}", Name = "GetBasket")]
