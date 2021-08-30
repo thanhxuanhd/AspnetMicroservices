@@ -164,3 +164,17 @@ services:
       - ordering.api
     ports:
       - "8006:80"
+
+  aspnetrunbasicblazor:
+    container_name: aspnetrunbasicblazor
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:GatewayAddress=http://ocelotapigw"
+    depends_on:
+      - ocelotapigw
+      - catalog.api
+      - basket.api
+      - discount.api
+      - ordering.api
+    ports:
+      - "8007:80"
