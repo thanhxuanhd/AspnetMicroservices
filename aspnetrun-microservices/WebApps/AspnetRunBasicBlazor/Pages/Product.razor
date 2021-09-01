@@ -1,6 +1,8 @@
 ﻿@page "/Product"
 @inject ICatalogService CatalogService
 @inject IBasketService BasketService
+@inject NavigationManager NavManager
+@implements IDisposable
 
 <div class="container">
     <div class="row">
@@ -26,7 +28,7 @@
                     @foreach (var category in CategoryList)
                     {
                         <li class="list-group-item">
-                            <NavLink href="@($"/Product/{category}")">
+                            <NavLink href="@($"/Product?categoryName={category}")">
                                 @category
                             </NavLink>
                         </li>
@@ -84,14 +86,16 @@
     [Parameter]
     public string SelectedCategory { get; set; }
 
-    [Parameter]
-    public string CategoryName { get; set; }
+    public string CategoryName { get; set; } = string.Empty;
 
     public IEnumerable<string> CategoryList { get; set; } = new List<string>();
     public IEnumerable<CatalogModel> ProductList { get; set; } = new List<CatalogModel>();
 
     protected override async Task OnInitializedAsync()
     {
+        GetQueryCategoryStringValues();
+        NavManager.LocationChanged += HandleLocationChanged;
+
         var productList = await CatalogService.GetCatalog();
         CategoryList = productList.Select(p => p.Category).Distinct();
 
@@ -104,5 +108,23 @@
         {
             ProductList = productList;
         }
+    }
+
+    void GetQueryCategoryStringValues()
+    {
+        var categoryName = string.Empty;
+        NavManager.TryGetQueryString<string>("categoryName", out categoryName);
+        CategoryName = categoryName;
+    }
+
+    void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        GetQueryCategoryStringValues();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= HandleLocationChanged;
     }
 }

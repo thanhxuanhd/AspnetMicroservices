@@ -1,0 +1,29 @@
+﻿@page "/Confirmation"
+@inject NavigationManager NavManager
+<div class="container contact-container">
+    <h1 class="mt-4 mb-3">
+        Confirmation
+    </h1>
+    <hr />
+    @if (!string.IsNullOrEmpty(Message))
+    {
+        <h3>@Message</h3>
+    }
+    <br />
+    <p>If you have any further questions, you can contact us 501-222-2222.</p>
+</div>
+
+@code {
+    public string Message { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Message = "Your email was sent.";
+        NavManager.TryGetQueryString<bool>("checkout", out bool isCheckout);
+        if (isCheckout)
+        {
+            Message = "Your order submitted successfully.";
+        }
+    }
+}
+

@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{8D8A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetRunBasics", "WebApps\AspnetRunBasics\AspnetRunBasics.csproj", "{3819817C-DD30-4C2C-8F42-E16F049C2E2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspnetRunBasicBlazor", "WebApps\AspnetRunBasicBlazor\AspnetRunBasicBlazor.csproj", "{4E0C3CB1-6D1B-479E-B9D2-C95FEE932307}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetRunBasicBlazor", "WebApps\AspnetRunBasicBlazor\AspnetRunBasicBlazor.csproj", "{4E0C3CB1-6D1B-479E-B9D2-C95FEE932307}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
