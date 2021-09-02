@@ -1,5 +1,7 @@
 using AspnetRunBasicBlazor.Services;
-using Microsoft.AspNetCore.Components;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]));
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]));
+builder.Services.AddHealthChecks()
+               .AddUrlGroup(new Uri(builder.Configuration["ApiSettings:GatewayAddress"]), "Ocelot API Gw", HealthStatus.Degraded);
 
 var app = builder.Build();
 
@@ -30,8 +34,15 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
-app.MapBlazorHub();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapBlazorHub();
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+});
 app.MapFallbackToPage("/_Host");
 
 app.Run();

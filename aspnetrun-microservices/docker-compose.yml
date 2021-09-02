@@ -76,11 +76,18 @@ services:
       context: .
       dockerfile: WebApps/AspnetRunBasicBlazor/Dockerfile
 
+  webstatus:
+    image: ${DOCKER_REGISTRY-}webstatus
+    build:
+      context: .
+      dockerfile: WebApps/WebStatus/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
   postgres_data:
   pgadmin_data:
+
 
 
 
