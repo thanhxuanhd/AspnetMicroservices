@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
+using System;
 
 namespace Common.Logging;
 public static class SeriLogger

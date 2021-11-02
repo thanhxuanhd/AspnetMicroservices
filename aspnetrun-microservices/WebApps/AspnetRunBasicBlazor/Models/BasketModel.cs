@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace AspnetRunBasicBlazor.Models;
 public class BasketModel
 {

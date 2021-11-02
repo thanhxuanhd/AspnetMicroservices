@@ -1,9 +1,14 @@
 using Common.Logging;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
 using Shopping.Aggregator.Extensions;
 using Shopping.Aggregator.Services;
+using System;
+using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 

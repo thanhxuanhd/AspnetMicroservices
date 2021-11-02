@@ -1,4 +1,3 @@
-using AutoMapper;
 using Basket.API.GrpcService;
 using Basket.API.Repositories;
 using Discount.Grpc.Protos;
@@ -7,7 +6,12 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using HealthChecks.UI.Client;
-
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Basket.API
 {

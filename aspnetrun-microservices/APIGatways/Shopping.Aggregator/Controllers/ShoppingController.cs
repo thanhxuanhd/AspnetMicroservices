@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shopping.Aggregator.Models;
 using Shopping.Aggregator.Services;
+using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Shopping.Aggregator.Controllers;
 [Route("api/v1/[controller]")]

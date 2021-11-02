@@ -10,6 +10,14 @@ namespace Ordering.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(CorsName, policy =>
+            //    {
+            //        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            //    });
+            //});
+
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());

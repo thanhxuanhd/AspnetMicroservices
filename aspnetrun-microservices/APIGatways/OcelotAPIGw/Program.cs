@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+
 namespace OcelotAPIGw;
 public class Program
 {
@@ -19,8 +23,8 @@ public class Program
         .ConfigureLogging(
             (hostingContext, loggingBuilder) =>
             {
-                loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                loggingBuilder.AddConsole();
-                loggingBuilder.AddDebug();
+                //loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                //loggingBuilder.AddConsole();
+                //loggingBuilder.AddDebug();
             });
 }

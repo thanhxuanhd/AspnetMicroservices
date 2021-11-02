@@ -1,4 +1,6 @@
-﻿namespace Shopping.Aggregator.Models;
+﻿using System.Collections.Generic;
+
+namespace Shopping.Aggregator.Models;
 public class ShoppingModel
 {
     public string UserName { get; set; }
