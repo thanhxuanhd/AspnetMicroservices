@@ -28,9 +28,9 @@ public class RepositoryBase<T> : IAsyncRepository<T> where T : EntityBase
         return await _dbContext.Set<T>().Where(predicate).ToListAsync();
     }
 
-    public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null,
-                                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                                 string includeString = null,
+    public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate,
+                                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
+                                                 string includeString,
                                                  bool disableTracking = true)
     {
         IQueryable<T> query = _dbContext.Set<T>();
