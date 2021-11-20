@@ -19,7 +19,7 @@ builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]));
 builder.Services.AddHealthChecks()
-               .AddUrlGroup(new Uri(builder.Configuration["ApiSettings:GatewayAddress"]), "Ocelot API Gw", HealthStatus.Degraded);
+               .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:GatewayAddress"]}/hc"), "Ocelot API Gw", HealthStatus.Degraded);
 
 var app = builder.Build();
 

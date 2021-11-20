@@ -31,7 +31,7 @@ namespace AspnetRunBasics
             services.AddHttpClient<IOrderService, OrderService>(c =>
                 c.BaseAddress = new Uri(Configuration["ApiSettings:GatewayAddress"]));
             services.AddHealthChecks()
-                .AddUrlGroup(new Uri(Configuration["ApiSettings:GatewayAddress"]), "Ocelot API Gw", HealthStatus.Degraded);
+               .AddUrlGroup(new Uri($"{Configuration["ApiSettings:GatewayAddress"]}/hc"), "Ocelot API Gw", HealthStatus.Degraded);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

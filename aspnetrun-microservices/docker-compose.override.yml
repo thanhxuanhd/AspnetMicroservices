@@ -127,6 +127,9 @@ services:
     container_name: ocelotapigw
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:CatalogUrl=http://catalog.api"
+      - "ApiSettings:BasketUrl=http://basket.api"
+      - "ApiSettings:OrderingUrl=http://ordering.api"
     depends_on:
         - catalog.api
         - basket.api
@@ -196,7 +199,9 @@ services:
       - HealthChecksUI__HealthChecks__5__Name=AspnetRunBasics WebMVC Health Check
       - HealthChecksUI__HealthChecks__5__Uri=http://aspnetrunbasics/hc
       - HealthChecksUI__HealthChecks__6__Name=AspnetRunBasics Blazor Health Check
-      - HealthChecksUI__HealthChecks__6__Uri=http://aspnetrunbasicblazor/hc 
+      - HealthChecksUI__HealthChecks__6__Uri=http://aspnetrunbasicblazor/hc
+      - HealthChecksUI__HealthChecks__7__Name=OcelotAPIGw Check
+      - HealthChecksUI__HealthChecks__7__Uri=http://ocelotapigw/hc 
     ports:
       - "8008:80"
 
