@@ -10,10 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <None Include=".env" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="tye.yaml" />
   </ItemGroup>
 </Project>

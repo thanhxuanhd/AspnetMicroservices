@@ -6,15 +6,31 @@
 * Visual Studio 2022
 * Docker Desktop
 * Ubuntu on WSL
-* 
+* Tye [link](https://github.com/dotnet/tye)
 
 ## How to run the project
 
-Run command for build project
+Run command for build project 
+Go to folder contain file `docker-compose` or `tye.yaml`
 
+1. Using docker-compose
 ```Powershell
-docker compose -f .\docker-compose.yml -f .\docker-compose.override.yml up -d
+docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml up -d
 ```
+2. Using tye
+```Powershell
+tye run --port 9900
+```
+
+## Access To Application
+
+* Tye Dashboard if using tye at location http://localhost:9900/
+
+* aspnetrunbasics: http://localhost:8006
+
+* aspnetrunbasicblazor: http://localhost:8007
+
+* webstatus: http://localhost:8008/healthchecks-ui
 
 ## Describe the project
 

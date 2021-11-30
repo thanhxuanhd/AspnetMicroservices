@@ -1,0 +1,144 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: aspnetrun-microservices
+services:
+
+- name: catalogdb
+  image: mongo
+  env_file:
+    - .env
+  bindings:
+    - port: 27017
+
+- name: basketdb
+  image: redis:alpine
+  bindings:
+    - port: 6379
+
+- name: discountdb
+  image: postgres
+  env_file:
+    - .env
+  bindings:
+    - port: 5432
+   
+- name: pgadmin
+  image: dpage/pgadmin4
+  env_file:
+    - .env
+  bindings:
+    - port: 5050
+
+- name: portainer
+  image: portainer/portainer-ce
+  bindings:
+    - name: http8080
+      protocol: http
+      containerPort: 8080
+      port: 8080
+    - name: http9000
+      protocol: http
+      containerPort: 9000
+      port: 9000
+
+- name: orderdb
+  image: mcr.microsoft.com/mssql/server:2019-latest
+  env:
+    - name: SA_PASSWORD
+      value: Pass@word
+    - name: ACCEPT_EULA
+      value: "Y"
+  bindings:
+    - port: 1433
+
+- name: rabbitmq
+  image: rabbitmq:3-management-alpine
+  bindings:
+    - name: http5672
+      protocol: http
+      containerPort: 5672
+      port: 5672
+    - name: http15672
+      protocol: http
+      containerPort: 15672
+      port: 15672
+
+- name: catalogapi
+  project: Services/Catalog/Catalog.API/Catalog.API.csproj
+  env_file:
+    - .env
+  env:
+    - name: DatabaseSettings__ConnectionString
+      value: mongodb://localhost:27017
+  bindings:
+    - port: 8000
+
+- name: basketapi
+  project: Services/Basket/Basket.API/Basket.API.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8001
+
+- name: discountapi
+  project: Services/Discount/Discount.API/Discount.API.csproj
+  env_file:
+    - .env
+  env:
+    - name: DatabaseSettings__ConnectionString
+      value: Server=localhost;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234
+  bindings:
+    - port: 8002
+
+- name: discountgrpc
+  project: Services/Discount/Discount.Grpc/Discount.Grpc.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8003
+
+- name: orderingapi
+  project: Services/Ordering/Ordering.API/Ordering.API.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8004
+
+- name: ocelotapigw
+  project: APIGatways/OcelotAPIGw/OcelotAPIGw.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8010
+
+- name: shoppingaggregator
+  project: APIGatways/Shopping.Aggregator/Shopping.Aggregator.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8005
+
+- name: aspnetrunbasics
+  project: WebApps/AspnetRunBasics/AspnetRunBasics.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8006
+
+- name: aspnetrunbasicblazor
+  project: WebApps/AspnetRunBasicBlazor/AspnetRunBasicBlazor.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8007
+
+- name: webstatus
+  project: WebApps/WebStatus/WebStatus.csproj
+  env_file:
+    - .env
+  bindings:
+    - port: 8008
