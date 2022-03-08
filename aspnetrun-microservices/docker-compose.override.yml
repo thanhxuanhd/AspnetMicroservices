@@ -114,7 +114,7 @@ services:
     container_name: ordering.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Pass@word"
+      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Pass@word;TrustServerCertificate=True"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - orderdb
@@ -201,7 +201,6 @@ services:
       - HealthChecksUI__HealthChecks__6__Name=AspnetRunBasics Blazor Health Check
       - HealthChecksUI__HealthChecks__6__Uri=http://aspnetrunbasicblazor/hc
       - HealthChecksUI__HealthChecks__7__Name=OcelotAPIGw Check
-      - HealthChecksUI__HealthChecks__7__Uri=http://ocelotapigw/hc 
+      - HealthChecksUI__HealthChecks__7__Uri=http://ocelotapigw/hc
     ports:
       - "8008:80"
-

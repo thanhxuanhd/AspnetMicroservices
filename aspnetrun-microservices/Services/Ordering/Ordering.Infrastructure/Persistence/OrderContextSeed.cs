@@ -10,6 +10,8 @@ public class OrderContextSeed
 {
     public static async Task SeedAsync(OrderContext orderContext, ILogger<OrderContextSeed> logger)
     {
+        orderContext.Database.EnsureCreated();
+
         if (!orderContext.Orders.Any())
         {
             orderContext.Orders.AddRange(GetPreconfiguredOrders());

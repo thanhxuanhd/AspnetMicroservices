@@ -10,6 +10,7 @@ using ValidationException = Ordering.Application.Exceptions.ValidationException;
 namespace Ordering.Application.Behaviours
 {
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -25,7 +26,7 @@ namespace Ordering.Application.Behaviours
                 var context = new ValidationContext<TRequest>(request);
 
                 var validationResults = await Task.WhenAll(_validators.Select(x => x.ValidateAsync(context, cancellationToken)));
-                var failures = validationResults.SelectMany(x=>x.Errors).Where(f=> f!= null).ToList();
+                var failures = validationResults.SelectMany(x => x.Errors).Where(f => f != null).ToList();
 
                 if (failures.Any())
                 {
