@@ -1,30 +1,56 @@
-using Microsoft.AspNetCore.Hosting;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Ocelot.Cache.CacheManager;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using System;
+using System.Threading.Tasks;
 
-namespace OcelotAPIGw;
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+ConfigureServices();
+
+var app = builder.Build();
+await Configure();
+
+app.Run();
+
+void ConfigureServices()
 {
-    public static void Main(string[] args)
+    builder.Configuration.AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
+
+    builder.Services.AddOcelot()
+              .AddCacheManager(settings => settings.WithDictionaryHandle());
+    builder.Services.AddHealthChecks()
+            .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:CatalogUrl"]}/swagger/index.html"), "Catalog.API", HealthStatus.Degraded)
+            .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:BasketUrl"]}/swagger/index.html"), "Basket.API", HealthStatus.Degraded)
+            .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:OrderingUrl"]}/swagger/index.html"), "Ordering.API", HealthStatus.Degraded);
+}
+
+async Task Configure()
+{
+    if (app.Environment.IsDevelopment())
     {
-        CreateHostBuilder(args).Build().Run();
+        app.UseDeveloperExceptionPage();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true);
-            })
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            })
-        .ConfigureLogging(
-            (hostingContext, loggingBuilder) =>
-            {
-                //loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                //loggingBuilder.AddConsole();
-                //loggingBuilder.AddDebug();
-            });
+    app.UseRouting();
+
+    app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+    });
+
+    await app.UseOcelot();
 }

@@ -13,6 +13,10 @@
 Run command for build project 
 Go to folder contain file `docker-compose` or `tye.yaml`
 
+*Run command create network only first time*
+```
+docker network create -d bridge my-network
+```
 1. Using docker-compose
 ```Powershell
 docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml up -d
@@ -24,13 +28,20 @@ tye run --port 9900
 
 ## Access To Application
 
-* Tye Dashboard if using tye at location http://localhost:9900/
+### Using Docker Compose Build
 
 * aspnetrunbasics: http://localhost:8006
 
 * aspnetrunbasicblazor: http://localhost:8007
 
 * webstatus: http://localhost:8008/healthchecks-ui
+
+### Using Tye Build
+* aspnetrunbasics: http://localhost:9006
+
+* aspnetrunbasicblazor: http://localhost:9007
+
+* webstatus: http://localhost:9008/healthchecks-ui
 
 ## Describe the project
 

@@ -75,14 +75,14 @@ services:
     - name: DatabaseSettings__ConnectionString
       value: mongodb://localhost:27017
   bindings:
-    - port: 8000
+    - port: 9000
 
 - name: basketapi
   project: Services/Basket/Basket.API/Basket.API.csproj
   env_file:
     - .env
   bindings:
-    - port: 8001
+    - port: 9001
 
 - name: discountapi
   project: Services/Discount/Discount.API/Discount.API.csproj
@@ -92,53 +92,53 @@ services:
     - name: DatabaseSettings__ConnectionString
       value: Server=localhost;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234
   bindings:
-    - port: 8002
+    - port: 9002
 
 - name: discountgrpc
   project: Services/Discount/Discount.Grpc/Discount.Grpc.csproj
   env_file:
     - .env
   bindings:
-    - port: 8003
+    - port: 9003
 
 - name: orderingapi
   project: Services/Ordering/Ordering.API/Ordering.API.csproj
   env_file:
     - .env
   bindings:
-    - port: 8004
+    - port: 9004
 
 - name: ocelotapigw
   project: APIGatways/OcelotAPIGw/OcelotAPIGw.csproj
   env_file:
     - .env
   bindings:
-    - port: 8010
+    - port: 9010
 
 - name: shoppingaggregator
   project: APIGatways/Shopping.Aggregator/Shopping.Aggregator.csproj
   env_file:
     - .env
   bindings:
-    - port: 8005
+    - port: 9005
 
 - name: aspnetrunbasics
   project: WebApps/AspnetRunBasics/AspnetRunBasics.csproj
   env_file:
     - .env
   bindings:
-    - port: 8006
+    - port: 9006
 
 - name: aspnetrunbasicblazor
   project: WebApps/AspnetRunBasicBlazor/AspnetRunBasicBlazor.csproj
   env_file:
     - .env
   bindings:
-    - port: 8007
+    - port: 9007
 
 - name: webstatus
   project: WebApps/WebStatus/WebStatus.csproj
   env_file:
     - .env
   bindings:
-    - port: 8008
+    - port: 9008

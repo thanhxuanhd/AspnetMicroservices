@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8000"
+          "Host": "localhost",
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Catalog",
@@ -18,8 +18,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8000"
+          "Host": "localhost",
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Catalog/{id}",
@@ -30,8 +30,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8000"
+          "Host": "localhost",
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Catalog/GetProductByCategory/{category}",
@@ -42,8 +42,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8001"
+          "Host": "localhost",
+          "Port": "9001"
         }
       ],
       "UpstreamPathTemplate": "/Basket/{userName}",
@@ -54,8 +54,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8001"
+          "Host": "localhost",
+          "Port": "9001"
         }
       ],
       "UpstreamPathTemplate": "/Basket",
@@ -66,8 +66,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8001"
+          "Host": "localhost",
+          "Port": "9001"
         }
       ],
       "UpstreamPathTemplate": "/Basket/Checkout",
@@ -85,8 +85,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8002"
+          "Host": "localhost",
+          "Port": "9002"
         }
       ],
       "UpstreamPathTemplate": "/Discount/{productName}",
@@ -97,8 +97,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8002"
+          "Host": "localhost",
+          "Port": "9002"
         }
       ],
       "UpstreamPathTemplate": "/Discount",
@@ -109,8 +109,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": "8004"
+          "Host": "localhost",
+          "Port": "9004"
         }
       ],
       "UpstreamPathTemplate": "/Order/{userName}",

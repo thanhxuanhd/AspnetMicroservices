@@ -1,25 +1,44 @@
-using Discount.Grpc.Extensions;
+using Discount.Grpc.Repositories;
+using Discount.Grpc.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
-namespace Discount.Grpc
+var builder = WebApplication.CreateBuilder(args);
+ConfigureServices();
+
+var app = builder.Build();
+Configure();
+
+app.Run();
+
+void ConfigureServices()
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
-            host.MigrateDatabase<Program>();
-            host.Run();
-        }
+    builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddGrpc();
+}
 
-        // Additional configuration is required to successfully run gRPC on macOS.
-        // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+void Configure()
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
     }
+
+    app.UseRouting();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapGrpcService<DiscountService>();
+
+        endpoints.MapGet("/", async context =>
+        {
+            await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+        });
+    });
 }
