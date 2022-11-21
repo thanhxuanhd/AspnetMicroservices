@@ -38,7 +38,14 @@ void ConfigureServices()
             });
         });
     });
-    builder.Services.AddMassTransitHostedService();
+
+    builder.Services.Configure<MassTransitHostOptions>(
+       options =>
+       {
+           options.WaitUntilStarted = true;
+           options.StartTimeout = TimeSpan.FromSeconds(30);
+           options.StopTimeout = TimeSpan.FromMinutes(1);
+       });
 
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.AddScoped<BasketCheckoutConsumer>();
@@ -66,13 +73,10 @@ void Configure()
 
     app.UseAuthorization();
 
-    app.UseEndpoints(endpoints =>
+    app.MapControllers();
+    app.MapHealthChecks("/hc", new HealthCheckOptions()
     {
-        endpoints.MapControllers();
-        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
 }

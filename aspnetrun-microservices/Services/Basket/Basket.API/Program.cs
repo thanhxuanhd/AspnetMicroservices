@@ -42,7 +42,15 @@ void ConfigureServices()
             configuration.Host(builder.Configuration["EventBusSettings:HostAddress"]);
         });
     });
-    builder.Services.AddMassTransitHostedService();
+
+    builder.Services.Configure<MassTransitHostOptions>(
+        options =>
+        {
+            options.WaitUntilStarted = true;
+            options.StartTimeout = TimeSpan.FromSeconds(30);
+            options.StopTimeout = TimeSpan.FromMinutes(1);
+        });
+    //builder.Services.AddMassTransitHostedService();
 
     builder.Services.AddControllers();
     builder.Services.AddSwaggerGen(c =>
@@ -67,13 +75,10 @@ void Configure()
 
     app.UseAuthorization();
 
-    app.UseEndpoints(endpoints =>
+    app.MapControllers();
+    app.MapHealthChecks("/hc", new HealthCheckOptions()
     {
-        endpoints.MapControllers();
-        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
 }
