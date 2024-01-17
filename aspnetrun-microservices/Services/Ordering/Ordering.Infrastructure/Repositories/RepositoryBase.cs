@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Ordering.Infrastructure.Repositories;
+
 public class RepositoryBase<T> : IAsyncRepository<T> where T : EntityBase
 {
     protected readonly OrderContext _dbContext;
