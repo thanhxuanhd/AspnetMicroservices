@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServices();
@@ -28,8 +29,14 @@ void ConfigureServices()
     builder.Services.AddScoped<ICatelogContext, CatalogContext>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+    var mongoConnectionString = builder.Configuration["DatabaseSettings:ConnectionString"];
+    builder.Services.AddSingleton(sp => new MongoClient(mongoConnectionString));
+
     builder.Services.AddHealthChecks()
-           .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "MongoDb Health", HealthStatus.Degraded);
+    .AddMongoDb(sp => sp.GetRequiredService<MongoClient>(),
+                name: "MongoDb Health",
+                failureStatus: HealthStatus.Degraded,
+                tags: ["database", "mongodb"]);
 }
 
 void Configure()
@@ -45,13 +52,10 @@ void Configure()
 
     app.UseAuthorization();
 
-    app.UseEndpoints(endpoints =>
+    app.MapControllers();
+    app.MapHealthChecks("/hc", new HealthCheckOptions()
     {
-        endpoints.MapControllers();
-        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
 }

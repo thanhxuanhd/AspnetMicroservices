@@ -35,16 +35,9 @@ void Configure()
 
     app.UseAuthorization();
 
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapRazorPages();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapHealthChecksUI();
-
-            endpoints.MapControllerRoute(
+    app.MapRazorPages();
+    app.MapHealthChecksUI();
+    app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-        });
-    });
 }

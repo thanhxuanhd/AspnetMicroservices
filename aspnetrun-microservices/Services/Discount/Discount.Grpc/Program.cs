@@ -18,7 +18,7 @@ app.Run();
 void ConfigureServices()
 {
     builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(_ => AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.AddGrpc();
 }
 
@@ -32,13 +32,9 @@ void Configure()
 
     app.UseRouting();
 
-    app.UseEndpoints(endpoints =>
+    app.MapGrpcService<DiscountService>();
+    app.MapGet("/", async context =>
     {
-        endpoints.MapGrpcService<DiscountService>();
-
-        endpoints.MapGet("/", async context =>
-        {
-            await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-        });
+        await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
     });
 }

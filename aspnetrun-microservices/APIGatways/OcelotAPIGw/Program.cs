@@ -42,14 +42,11 @@ async Task Configure()
 
     app.UseAuthorization();
 
-    app.UseEndpoints(endpoints =>
+    app.MapControllers();
+    app.MapHealthChecks("/hc", new HealthCheckOptions()
     {
-        endpoints.MapControllers();
-        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
 
     await app.UseOcelot();

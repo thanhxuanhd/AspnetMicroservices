@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +33,7 @@ void ConfigureServices()
         o.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]);
     });
     builder.Services.AddScoped<DiscountGrpcService>();
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(x => AppDomain.CurrentDomain.GetAssemblies());
 
     builder.Services.AddMassTransit(config =>
     {

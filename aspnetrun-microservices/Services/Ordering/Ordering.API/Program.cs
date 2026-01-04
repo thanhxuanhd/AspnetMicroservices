@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Ordering.API.EventBusConsumer;
 using Ordering.Application;
 using Ordering.Infrastructure;
@@ -47,7 +47,7 @@ void ConfigureServices()
            options.StopTimeout = TimeSpan.FromMinutes(1);
        });
 
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(x => AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.AddScoped<BasketCheckoutConsumer>();
 
     builder.Services.AddControllers();

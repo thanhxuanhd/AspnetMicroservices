@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
-using Shopping.Aggregator.Extensions;
 using Shopping.Aggregator.Services;
 using System;
 using System.Net.Http;
@@ -30,13 +28,6 @@ builder.Services.AddHealthChecks()
 
 IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 {
-    // In this case will wait for
-    //  2 ^ 1 = 2 seconds then
-    //  2 ^ 2 = 4 seconds then
-    //  2 ^ 3 = 8 seconds then
-    //  2 ^ 4 = 16 seconds then
-    //  2 ^ 5 = 32 seconds
-
     return HttpPolicyExtensions
         .HandleTransientHttpError()
         .WaitAndRetryAsync(
@@ -63,20 +54,20 @@ builder.Services.AddTransient<LoggingDelegatingHandler>();
 
 
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
-               c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CatalogUrl"]))
+               c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CatalogUrl"] ?? throw new ArgumentException("ApiSettings:CatalogUrl")))
                .AddHttpMessageHandler<LoggingDelegatingHandler>()
                .AddPolicyHandler(GetRetryPolicy())
                .AddPolicyHandler(GetCircuitBreakerPolicy());
 
 
 builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
-    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BasketUrl"]))
+    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BasketUrl"] ?? throw new ArgumentException("ApiSettings:BasketUrl")))
     .AddHttpMessageHandler<LoggingDelegatingHandler>()
     .AddPolicyHandler(GetRetryPolicy())
     .AddPolicyHandler(GetCircuitBreakerPolicy());
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
-    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:OrderingUrl"]))
+    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:OrderingUrl"] ?? throw new ArgumentException("ApiSettings:OrderingUrl")))
     .AddHttpMessageHandler<LoggingDelegatingHandler>()
     .AddPolicyHandler(GetRetryPolicy())
     .AddPolicyHandler(GetCircuitBreakerPolicy());
@@ -94,14 +85,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
+app.MapControllers();
+app.MapHealthChecks("/hc", new HealthCheckOptions()
 {
-    endpoints.MapControllers();
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 app.Run();

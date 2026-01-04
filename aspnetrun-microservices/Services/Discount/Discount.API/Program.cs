@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServices();
@@ -40,13 +40,10 @@ void Configure()
 
     app.UseAuthorization();
 
-    app.UseEndpoints(endpoints =>
+    app.MapControllers();
+    app.MapHealthChecks("/hc", new HealthCheckOptions()
     {
-        endpoints.MapControllers();
-        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
 }
